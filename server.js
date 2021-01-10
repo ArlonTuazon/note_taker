@@ -1,14 +1,16 @@
 const express = require('express');
-const path = require ('path');
+
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 5050;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'Develop', 'public')));
+app.use(express.static('public'));
 
+require('./routes/apiRoutes')(app);
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+require('./routes/htmlRoutes')(app);
+
+app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
 
