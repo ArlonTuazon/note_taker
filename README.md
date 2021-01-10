@@ -13,6 +13,9 @@
 
 ## Screenshot of the Project
 
+## ![](homepage.png)
+## ![](notes.png)
+
 ## Github URL
    https://github.com/ArlonTuazon/note_taker
    
