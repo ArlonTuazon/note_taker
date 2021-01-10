@@ -1,40 +1,41 @@
-const fs = require('fs');
-const uniqid = require('uniqid');
+const fs = require("fs");
+const uniqid = require("uniqid");
 
 module.exports = (app) => {
-   const dataNote = require(__dirname + '/../Develop/db/db.json');
+  let noteData = require(__dirname + "/../Develop/db/db.json");
 
-    app.get('api/notes', (req, res) =>{
-        res.json(dataNote);
-    }); 
+  app.get("/api/notes", (req, res) => {
+    res.json(noteData);
+  });
 
-    app.post ('api/notes', (req, res) => {
-        const newNote = req.body;
-        newNote.id = uniqid();
+  app.post("/api/notes", (req, res) => {
+    let newNote = req.body;
+    newNote.id = uniqid();
 
-        dataNote.push(newNote);
+    noteData.push(newNote);
 
-        const rawNote = JSON.stringify(dataNote);
+    const rawData = JSON.stringify(noteData);
 
-        fs.writeFile(__dirname + '/../Develop/db/db.json', rawNote, (err) => {
-            if (err) throw err;
-        });
-        res.end();
+    fs.writeFile(__dirname + "/../Develop/db/db.json", rawData, (err) => {
+      if (err) throw err;
+    });
+    res.end();
+  });
+
+  app.delete("/api/notes/:id", (req, res) => {
+    const noteId = req.params.id;
+
+    let filtered = noteData.filter(function (note) {
+      return note.id != noteId;
     });
 
-    app.delete('/api/notes/:id', (req, res) => {
-        const idNote = req.params.id;
+    newNoteData = JSON.stringify(filtered);
+    noteData = filtered;
 
-        const filterNotes = dataNote.filter(function (note){
-            return note.id != idNote;
-        });
-
-        newDataNote = JSON.stringify(filterNotes);
-        dataNote = filterNotes;
-
-        fs.writeFileSync(__dirname + '../Develop/db/db.json', newDataNote, (err) => {
-            if (err) throw err;
-        });
-        res.end();
+    fs.writeFileSync(__dirname + "/../Develop/db/db.json", newNoteData, (err) => {
+      if (err) throw err;
     });
+
+    res.end();
+  });
 };
